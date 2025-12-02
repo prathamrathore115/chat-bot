@@ -2,65 +2,64 @@ import { useState } from 'react'
 import './App.css'
 import ChatbotIcon from './assets/chatbot.svg?react';
 import UserIcon from './assets/user.svg?react';
+import 'https://unpkg.com/supersimpledev/chatbot.js';
 
-export function ChatInput() {
-  return (
-    <>
-      <input className='inputMsg' placeholder='Send a message to Chatbot' size="30" />
-      <button className='sendBtn'>Send</button>
-    </>
-  );
-}
 
-export function ChatMessages() {
-  const chatMessage = [
-    {
-      message: "hello chat bot",
-      sender: "user",
-      id: 1
-    },
-    {
-      message: "hello how can i help you?",
-      sender: "bot",
-      id: 2
-    },
-    {
-      message: "what is date today",
-      sender: "user",
-      id: 3
-    },
-    {
-      message: "its 12/1/2025",
-      sender: "bot",
-      id: 4
-    },
-  ];
+export function ChatInput({ chatMessages, setChatMessages }) {
+  const [inputText, setInputText] = useState('');
 
-  function handleSendMessage() {
-    
+  function saveInputText(event) {
+    setInputText(event.target.value);
+  }
 
-        chatMessage.push({
-          message: "userMessage",
-          sender: "user",
-          id: chatMessage.length + 1
-        });
+  async function sendMessage() {
+    const newChatMessages = [
+      ...chatMessages,
+      {
+        message: inputText,
+        sender: "user",
+        id: crypto.randomUUID()
+      }
+    ];
 
-        
-        console.log(chatMessage);
-  
+    setChatMessages(newChatMessages);
+
+    const response = await Chatbot.getResponseAsync(inputText);
+    setChatMessages(
+      [...newChatMessages,
+      {
+        message: response,
+        sender: "bot",
+        id: crypto.randomUUID()
+      }]
+    )
+
+    setInputText('');
   }
 
   return (
-    <>
-      <button onClick={handleSendMessage}>send mesaage</button>
-      {chatMessage.map((chat) => (
+    <div className='chat-input-container'>
+      <input className='chat-input' placeholder='Send a message to Chatbot' size="30"
+        onChange={saveInputText}
+        value={inputText}
+      />
+      <button className='chat-send-btn' onClick={sendMessage}>Send</button>
+    </div>
+  );
+}
+
+export function ChatMessages({ chatMessages }) {
+
+  return (
+    <div className='chat-message-container'>
+      {chatMessages.map((chat) => (
         <ChatMessage
           message={chat.message}
           sender={chat.sender}
           key={chat.id}
         />
       ))}
-    </>
+    </div>
   )
 
 
@@ -68,22 +67,35 @@ export function ChatMessages() {
 
 function ChatMessage({ message, sender }) {
   return (
-    <div>
-      {sender === "bot" && <ChatbotIcon width={44} height={44} />}
-      {message}
-      {sender === "user" && <UserIcon width={44} height={44} />}
+    <div className= {sender === "user" ? "chat-message-user" : "chat-message-bot"}>
+      {sender === "bot" && <ChatbotIcon className="chat-message-profile" />}
+      <div className='chat-message-text'>
+        {message}
+      </div>
+      {sender === "user" && <UserIcon className="chat-message-profile" />}
     </div>
   )
 
 }
 
 function App() {
+  const arr = useState([]);
+
+  const chatMessages = arr[0];
+  const setChatMessages = arr[1];
   return (
-    <>
-      <ChatInput />
-      <ChatMessages />
-    </>
+    <div className='app-container'>
+      <ChatMessages
+        chatMessages={chatMessages}
+      />
+      <ChatInput
+        chatMessages={chatMessages}
+        setChatMessages={setChatMessages}
+      />
+    </div>
   );
 }
 
 export default App
+
+
