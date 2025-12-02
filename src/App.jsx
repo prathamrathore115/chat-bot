@@ -6,18 +6,72 @@ import UserIcon from './assets/user.svg?react';
 export function ChatInput() {
   return (
     <>
-      <input placeholder='Send a message to Chatbot' size="30" />
-      <button>Send</button>
+      <input className='inputMsg' placeholder='Send a message to Chatbot' size="30" />
+      <button className='sendBtn'>Send</button>
     </>
   );
 }
 
-export function ChatMessage({ message, sender }) {
+export function ChatMessages() {
+  const chatMessage = [
+    {
+      message: "hello chat bot",
+      sender: "user",
+      id: 1
+    },
+    {
+      message: "hello how can i help you?",
+      sender: "bot",
+      id: 2
+    },
+    {
+      message: "what is date today",
+      sender: "user",
+      id: 3
+    },
+    {
+      message: "its 12/1/2025",
+      sender: "bot",
+      id: 4
+    },
+  ];
+
+  function handleSendMessage() {
+    
+
+        chatMessage.push({
+          message: "userMessage",
+          sender: "user",
+          id: chatMessage.length + 1
+        });
+
+        
+        console.log(chatMessage);
+  
+  }
+
+  return (
+    <>
+      <button onClick={handleSendMessage}>send mesaage</button>
+      {chatMessage.map((chat) => (
+        <ChatMessage
+          message={chat.message}
+          sender={chat.sender}
+          key={chat.id}
+        />
+      ))}
+    </>
+  )
+
+
+}
+
+function ChatMessage({ message, sender }) {
   return (
     <div>
-      {sender === "bot" && <ChatbotIcon width={24} height={24} />}
+      {sender === "bot" && <ChatbotIcon width={44} height={44} />}
       {message}
-      {sender === "user" && <UserIcon width={24} height={24} />}
+      {sender === "user" && <UserIcon width={44} height={44} />}
     </div>
   )
 
@@ -27,22 +81,7 @@ function App() {
   return (
     <>
       <ChatInput />
-      <ChatMessage
-        message="hello chat bot"
-        sender="user"
-      />
-      <ChatMessage
-        message="hello how can i help you?"
-        sender="bot"
-      />
-      <ChatMessage
-        message="what is date today"
-        sender="user"
-      />
-      <ChatMessage
-        message="its 12/1/2025"
-        sender="bot"
-      />
+      <ChatMessages />
     </>
   );
 }
