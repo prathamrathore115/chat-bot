@@ -2,17 +2,20 @@ import { useEffect, useRef, useState } from 'react'
 import './App.css'
 import ChatbotIcon from './assets/chatbot.svg?react';
 import UserIcon from './assets/user.svg?react';
-import 'https://unpkg.com/supersimpledev/chatbot.js';
+import loadingSpinner from './assets/loading-spinner.gif';
+import Chatbot from 'sumpersimpledev'
 
 
 export function ChatInput({ chatMessages, setChatMessages }) {
   const [inputText, setInputText] = useState('');
-
+  
   function saveInputText(event) {
     setInputText(event.target.value);
   }
 
+  
   async function sendMessage() {
+    setInputText('');
     const newChatMessages = [
       ...chatMessages,
       {
@@ -22,7 +25,15 @@ export function ChatInput({ chatMessages, setChatMessages }) {
       }
     ];
 
-    setChatMessages(newChatMessages);
+    // setChatMessages(newChatMessages);
+    setChatMessages(
+      [...newChatMessages,
+      {
+        message: <img className='chat-message-loading-spinnner' src={loadingSpinner}/>,
+        sender: "bot",
+        id: crypto.randomUUID()
+      }]
+    )
 
     const response = await Chatbot.getResponseAsync(inputText);
     setChatMessages(
@@ -34,7 +45,6 @@ export function ChatInput({ chatMessages, setChatMessages }) {
       }]
     )
 
-    setInputText('');
   }
 
   return (
@@ -57,6 +67,7 @@ export function ChatMessages({ chatMessages }) {
       containerEle.scrollTop = containerEle.scrollHeight;
     }
   },[chatMessages]);
+
   return (
     <div className='chat-message-container' ref={chatMessagesRef}>
       {chatMessages.map((chat) => (

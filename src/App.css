@@ -118,3 +118,8 @@ body {
 
     padding: 8px;
 }
+
+.chat-message-loading-spinnner{
+    height: 40px;
+    margin: -15px;
+}
