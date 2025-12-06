@@ -1,47 +1,78 @@
 import { useState } from 'react'
 import loadingSpinner from '../assets/loading-spinner.gif';
-import {Chatbot} from 'supersimpledev';
 import './ChatInput.css'
 
 
 export function ChatInput({ chatMessages, setChatMessages }) {
   const [inputText, setInputText] = useState('');
-  
+
   function saveInputText(event) {
     setInputText(event.target.value);
   }
 
-  
-  async function sendMessage() {
-    setInputText('');
-    const newChatMessages = [
-      ...chatMessages,
-      {
-        message: inputText,
-        sender: "user",
-        id: crypto.randomUUID()
-      }
-    ];
+  async function getBotReply(text) {
+    const API_KEY = "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";
 
-    // setChatMessages(newChatMessages);
+    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${API_KEY}`,
+        "HTTP-Referer": "http://localhost:5173",
+        "X-Title": "My React Chatbot"
+      },
+      body: JSON.stringify({
+        model: "deepseek/deepseek-v3.2",
+        messages: [
+          { role: "user", content: text }
+        ]
+      })
+    });
+
+    const data = await res.json();
+    return data.choices[0].message.content;
+  }
+
+  async function sendMessage() {
+    if (!inputText.trim()) return;
+
+    const userMessage = {
+      message: inputText,
+      sender: "user",
+      id: crypto.randomUUID(),
+    };
+
+    const newChatMessages = [...chatMessages, userMessage];
+    setInputText('');
+
     setChatMessages(
       [...newChatMessages,
       {
-        message: <img className='chat-message-loading-spinnner' src={loadingSpinner}/>,
+        message: <img className='chat-message-loading-spinnner' src={loadingSpinner} />,
         sender: "bot",
         id: crypto.randomUUID()
       }]
     )
 
-    const response = await Chatbot.getResponseAsync(inputText);
-    setChatMessages(
-      [...newChatMessages,
-      {
+    try {
+      const response = await getBotReply(userMessage.message);
+
+      const botMessage = {
         message: response,
         sender: "bot",
-        id: crypto.randomUUID()
-      }]
-    )
+        id: crypto.randomUUID(),
+      };
+
+      setChatMessages([...newChatMessages, botMessage]);
+    } catch (err) {
+      console.error(err);
+      const errorMessage = {
+        message: "Sorry, I couldn't reach the server.",
+        sender: "bot",
+        id: crypto.randomUUID(),
+      };
+      setChatMessages([...newChatMessages, errorMessage]);
+    }
 
   }
 
