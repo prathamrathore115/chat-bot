@@ -11,8 +11,8 @@
 }
 
 .chat-message-text {
-    max-width: 300px;
-    background-color: #fefefe;
+    max-width: 100%;
+    background-color: #f0f2f0;
     box-shadow: 0px 0px 4px 0px #565656;
     padding: 15px;
     margin: 10px 10px;
@@ -27,7 +27,8 @@
     border-radius: 100px;
     /* box-shadow: 0px 0px 6px 0px black; */
     box-shadow: 0px 0px 4px 0px white inset, 0px 0px 8px 0px black;
-
+    /* background-color: black;  */
+    align-items: start;
     padding: 8px;
 }
 

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import loadingSpinner from '../assets/loading-spinner.gif';
+import lightMode from '../assets/lightMode.png'
+import nightMode from '../assets/nightMode.png'
 import './ChatInput.css'
-
 
 export function ChatInput({ chatMessages, setChatMessages }) {
   const [inputText, setInputText] = useState('');
@@ -76,6 +77,20 @@ export function ChatInput({ chatMessages, setChatMessages }) {
 
   }
 
+  const [isDarkMode, setIsDarkMode] = useState(true);
+
+  const toggleTheme = () => {
+    setIsDarkMode(prevMode => {
+      const newMode = !prevMode;
+
+      document.body.className = newMode ? 'dark-theme' : 'light-theme';
+      document.getElementsByClassName('chat-send-btn')[0].style.color = newMode ? 'white' : 'black';
+      return newMode;
+    })
+  }
+
+
+
   return (
     <div className='chat-input-container'>
       <input className='chat-input' placeholder='Send a message to Chatbot' size="30"
@@ -83,6 +98,11 @@ export function ChatInput({ chatMessages, setChatMessages }) {
         value={inputText}
       />
       <button className='chat-send-btn' onClick={sendMessage}>Send</button>
+      <button className='theme-btn' onClick={toggleTheme}>
+        {
+          isDarkMode? (<img src={lightMode} className='theme-img' />) : (<img src={nightMode} className='theme-img' />)
+        }
+      </button>
     </div>
   );
 }

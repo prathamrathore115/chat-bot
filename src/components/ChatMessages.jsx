@@ -19,7 +19,6 @@ export function ChatMessages({ chatMessages }) {
           message={chat.message}
           sender={chat.sender}
           key={chat.id}
-          
         />
       ))}
     </div>
