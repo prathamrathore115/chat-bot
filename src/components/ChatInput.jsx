@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import loadingSpinner from '../assets/loading-spinner.gif';
 import lightMode from '../assets/lightMode.png'
 import nightMode from '../assets/nightMode.png'
 import './ChatInput.css'
@@ -41,38 +40,45 @@ export function ChatInput({ chatMessages, setChatMessages }) {
       message: inputText,
       sender: "user",
       id: crypto.randomUUID(),
+      isLoading: false
     };
 
-    const newChatMessages = [...chatMessages, userMessage];
-    setInputText('');
+    const messagesWithUser = [...chatMessages, userMessage];
 
-    setChatMessages(
-      [...newChatMessages,
-      {
-        message: <img className='chat-message-loading-spinnner' src={loadingSpinner} />,
-        sender: "bot",
-        id: crypto.randomUUID()
-      }]
-    )
+    const loadingMessageId = crypto.randomUUID();
+    const loadingMessage = {
+      id: loadingMessageId,
+      message: "",
+      sender: "bot",
+      isLoading: true
+    };
+
+    setChatMessages([...messagesWithUser, loadingMessage]);
+    setInputText('');
 
     try {
       const response = await getBotReply(userMessage.message);
 
-      const botMessage = {
-        message: response,
-        sender: "bot",
-        id: crypto.randomUUID(),
-      };
-
-      setChatMessages([...newChatMessages, botMessage]);
+      setChatMessages(prev =>
+        prev.map(msg =>
+          msg.id === loadingMessageId
+            ? { ...msg, message: response, isLoading: false }
+            : msg
+        )
+      );
     } catch (err) {
       console.error(err);
-      const errorMessage = {
-        message: "Sorry, I couldn't reach the server.",
-        sender: "bot",
-        id: crypto.randomUUID(),
-      };
-      setChatMessages([...newChatMessages, errorMessage]);
+      setChatMessages(prev =>
+        prev.map(msg =>
+          msg.id === loadingMessageId
+            ? {
+              ...msg,
+              message: "Sorry, I couldn't reach the server.",
+              isLoading: false
+            }
+            : msg
+        )
+      );
     }
 
   }
@@ -93,14 +99,17 @@ export function ChatInput({ chatMessages, setChatMessages }) {
 
   return (
     <div className='chat-input-container'>
-      <input className='chat-input' placeholder='Send a message to Chatbot' size="30"
+      <input
+        className='chat-input'
+        placeholder='Send a message to Chatbot'
+        size="30"
         onChange={saveInputText}
         value={inputText}
       />
       <button className='chat-send-btn' onClick={sendMessage}>Send</button>
       <button className='theme-btn' onClick={toggleTheme}>
         {
-          isDarkMode? (<img src={lightMode} className='theme-img' />) : (<img src={nightMode} className='theme-img' />)
+          isDarkMode ? (<img src={lightMode} className='theme-img' />) : (<img src={nightMode} className='theme-img' />)
         }
       </button>
     </div>

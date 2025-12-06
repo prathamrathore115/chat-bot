@@ -7,18 +7,19 @@ export function ChatMessages({ chatMessages }) {
   useEffect(() => {
     const containerEle = chatMessagesRef.current;
 
-    if(containerEle){
+    if (containerEle) {
       containerEle.scrollTop = containerEle.scrollHeight;
     }
-  },[chatMessages]);
+  }, [chatMessages]);
 
   return (
     <div className='chat-message-container' ref={chatMessagesRef}>
       {chatMessages.map((chat) => (
         <ChatMessage
+          key={chat.id}
           message={chat.message}
           sender={chat.sender}
-          key={chat.id}
+          isLoading={chat.isLoading}
         />
       ))}
     </div>

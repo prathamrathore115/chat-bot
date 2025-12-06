@@ -1,14 +1,19 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { ChatInput } from './components/ChatInput';
 import { ChatMessages } from './components/ChatMessages';
 import './App.css'
 
 
 function App() {
-  const arr = useState([]);
+  const [chatMessages,setChatMessages] = useState(() =>{
+    const saved = localStorage.getItem('chatHistory');
+    return saved ? JSON.parse(saved) : [];
+  });
 
-  const chatMessages = arr[0];
-  const setChatMessages = arr[1];
+  useEffect(() =>{
+    localStorage.setItem('chatHistory', JSON.stringify(chatMessages));
+  }, [chatMessages]);
+
   return (
     <>
     <div className='app-container'>
