@@ -1,16 +1,46 @@
-# React + Vite
+# React Chatbot App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A simple chatbot-style web app built with **React** and **Vite**.  
+This project is mainly for **learning purposes** – to practice React concepts, state management, component structure, and integrating APIs in a modern frontend setup.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🎯 Purpose of This Project
 
-## React Compiler
+This app was created to:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Learn how to set up a **React + Vite** project
+- Practice **functional components** and **props**
+- Work with **useState** and **useEffect**
+- Build a simple **chat UI**
+- Experiment with calling a **chatbot / LLM API**
+- Optionally store **chat history in localStorage**
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🛠️ Tech Stack
+
+- **React** (functional components + hooks)
+- **Vite** (for fast dev server and bundling)
+- **JavaScript (ES6+)**
+- **CSS** for styling
+- **localStorage** for storing chat history
+- (Optional) **OpenRouter / other LLM API** for bot responses
+
+---
+
+## 📁 Project Structure (simplified)
+
+```bash
+src/
+  main.jsx          # App entry (React + Vite mount)
+  App.jsx           # Root component, holds chatMessages state
+  components/
+    ChatInput.jsx   # Input box + send button
+    ChatMessages.jsx # Renders list of chat messages
+    ChatMessage.jsx # Single message bubble (user/bot)
+  assets/
+    chatbot.svg     # Bot icon
+    user.svg        # User icon
+    loading-spinner.gif
+  App.css           # Main styles
