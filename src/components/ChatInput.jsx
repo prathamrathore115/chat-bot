@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import lightMode from '../assets/lightMode.png'
 import nightMode from '../assets/nightMode.png'
-import './ChatInput.css'
+import './ChatInput.css';
+
 
 export function ChatInput({ chatMessages, setChatMessages }) {
   const [inputText, setInputText] = useState('');
@@ -11,18 +12,16 @@ export function ChatInput({ chatMessages, setChatMessages }) {
   }
 
   async function getBotReply(text) {
-    const API_KEY = "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";
-
-    const res = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    const api_key = import.meta.env.VITE_API_KEY;
+    const base_url = import.meta.env.VITE_API_BASE_URL;
+    const res = await fetch(`${base_url}`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${API_KEY}`,
-        "HTTP-Referer": "http://localhost:5173",
-        "X-Title": "My React Chatbot"
+        "Authorization": `Bearer ${api_key}`,
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "deepseek/deepseek-v3.2",
+        model: "tngtech/deepseek-r1t2-chimera:free",
         messages: [
           { role: "user", content: text }
         ]
