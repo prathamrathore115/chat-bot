@@ -11,7 +11,7 @@
 }
 
 .chat-message-text {
-    max-width: 50%;
+    max-width: 400px;
     background-color: #f0f2f0;
     box-shadow: 0px 0px 4px 0px #565656;
     padding: 15px;
@@ -23,7 +23,7 @@
 .chat-message-profile {
     width: 44px;
     height: 44px;
-    margin: 10px;
+    margin: 10px 5px;
     border-radius: 100px;
     /* box-shadow: 0px 0px 6px 0px black; */
     box-shadow: 0px 0px 4px 0px white inset, 0px 0px 8px 0px black;
