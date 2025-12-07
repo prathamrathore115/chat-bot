@@ -21,7 +21,7 @@ export function ChatInput({ chatMessages, setChatMessages }) {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "tngtech/deepseek-r1t2-chimera:free",
+        model: "amazon/nova-2-lite-v1:free",
         messages: [
           { role: "user", content: text }
         ]
