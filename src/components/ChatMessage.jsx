@@ -1,3 +1,6 @@
+import ReactMarkdown from "react-markdown";
+import rehypeHighlight from "rehype-highlight";
+import 'highlight.js/styles/github.css';
 import ChatbotIcon from '../assets/chatbot.svg';
 import UserIcon from '../assets/user.svg';
 import loadingSpinner from '../assets/loading-spinner.gif';
@@ -16,7 +19,10 @@ export function ChatMessage({ message, sender, isLoading }) {
             alt="Loading..."
           />
         ) : (
-          <span>{message}</span>
+          <span>
+            <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
+              {message}
+            </ReactMarkdown></span>
         )}
       </div>
       {sender === "user" && <img src={UserIcon} className="chat-message-profile" />}
