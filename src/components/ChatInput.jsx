@@ -11,6 +11,12 @@ export function ChatInput({ chatMessages, setChatMessages }) {
     setInputText(event.target.value);
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      sendMessage();
+    }
+  };
+
   async function getBotReply(text) {
     const api_key = import.meta.env.VITE_API_KEY;
     const base_url = import.meta.env.VITE_API_BASE_URL;
@@ -103,6 +109,7 @@ export function ChatInput({ chatMessages, setChatMessages }) {
         placeholder='Send a message to Chatbot'
         size="30"
         onChange={saveInputText}
+        onKeyDown={handleKeyDown}
         value={inputText}
       />
       <button className='chat-send-btn' onClick={sendMessage}>Send</button>
